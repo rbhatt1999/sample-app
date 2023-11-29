@@ -27,6 +27,7 @@ const calculate = (data)=> {
     const installmentAmounts = [];
     let firstmonthInvoice = 0;
     let lastmonthInvoice = 0;
+    let monthsCalculated = 0;
     for(let i = 1; i <= totalInstallment; i++) {
         let installmentAmount = 0;
         if(i === 1) {
@@ -37,30 +38,38 @@ const calculate = (data)=> {
             const firstMonthRentAfterDiscount = firstMonthRent - firstMonthDiscount;
             installmentAmount += firstMonthRentAfterDiscount;
             firstmonthInvoice = Math.round(firstMonthRentAfterDiscount);
+            monthsCalculated += 1;
         }
-            
+        // console.log(i, installmentAmount);
         if(i !== 1 && i !== totalInstallment) {
             installmentAmount += ((data.rent/frequencyMonths) - data.monthlyDiscount)*frequencyMonths;
+            monthsCalculated += frequencyMonths;
         }
-            
+        // console.log(i, installmentAmount);
         if(i == 1 && i == totalInstallment && frequencyMonths > 2) {
             const monthlyRent = (data.rent/frequencyMonths) - data.monthlyDiscount;
             let monthsforcalculation = frequencyMonths - 2 > contractDuration -2 ? contractDuration - 2 : frequencyMonths - 2;
             installmentAmount += monthlyRent * monthsforcalculation;
+            monthsCalculated += monthsforcalculation;
         }
-            
+        // console.log(i, installmentAmount); 
         if(i == 1 && i < totalInstallment && frequencyMonths > 1) {
             const monthlyRent = (data.rent/frequencyMonths) - data.monthlyDiscount;
             const totalRemainingMonths = frequencyMonths - 1;
             installmentAmount += monthlyRent * totalRemainingMonths;
+            monthsCalculated += totalRemainingMonths;
         }
-            
+        // console.log(i, installmentAmount);  
         if(i !== 1 && i == totalInstallment && frequencyMonths > 1){
             const monthlyRent = (data.rent/frequencyMonths) - data.monthlyDiscount;
             const totalRemainingMonths = frequencyMonths - 1;
-            installmentAmount += monthlyRent * totalRemainingMonths;
+            let contractRemainingMonths = contractDuration - monthsCalculated - 1;
+            // console.log(`totalRemainingMonths ${totalRemainingMonths} contractRemainingMonths ${contractRemainingMonths}`);
+            const actualRemainingMonths = totalRemainingMonths <= contractRemainingMonths ?  totalRemainingMonths : contractRemainingMonths;
+            // console.log(actualRemainingMonths);
+            installmentAmount += monthlyRent * actualRemainingMonths;
         }
-
+        // console.log(i, installmentAmount);
         if(i === totalInstallment) {
             const lastMonthDays = daysInMonth(new Date(data.contractEndDate).getMonth() + 1, new Date(data.contractEndDate).getFullYear());
             const lastMonthContractDays = new Date(data.contractEndDate).getDate();
@@ -69,8 +78,9 @@ const calculate = (data)=> {
             const lastMonthRentAfterDiscount = lastMonthRent - lastMonthDiscount;
             installmentAmount += lastMonthRentAfterDiscount;
             lastmonthInvoice = Math.round(lastMonthRentAfterDiscount);
+            monthsCalculated += 1;
         }
-            
+        // console.log(i, installmentAmount);  
         installmentAmounts.push(Math.round(installmentAmount));
     }
 
@@ -86,18 +96,18 @@ const calculate = (data)=> {
        }     
 }
     
+const data = {
+    rent: 60000,
+    frequency: 'half-yearly',
+    monthlyDiscount: 1000,
+    contractStartDate: '2023/11/01',
+    contractEndDate: '2024/08/31'
+};
 
-// const result = calculate(data);
+const result = calculate(data);
 
+// console.log(result);
 
-// const planfeq = document.getElementById('planfreq');
-
-// for (let i = 0; i < Object.keys(frequencyType).length; i++) {
-//     const option = document.createElement('option');
-//     option.value = Object.keys(frequencyType)[i];
-//     option.text = Object.keys(frequencyType)[i];
-//     planfeq.appendChild(option);
-// }
 
 const form = document.getElementById('form');
 
