@@ -71,7 +71,7 @@ const calculate = (data)=> {
             lastmonthInvoice = Math.round(lastMonthRentAfterDiscount);
         }
             
-        installmentAmounts.push(installmentAmount);
+        installmentAmounts.push(Math.round(installmentAmount));
     }
 
     const monthlyInvoice = [firstmonthInvoice]
