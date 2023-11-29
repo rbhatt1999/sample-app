@@ -90,14 +90,14 @@ const calculate = (data)=> {
 // const result = calculate(data);
 
 
-const planfeq = document.getElementById('planfreq');
+// const planfeq = document.getElementById('planfreq');
 
-for (let i = 0; i < Object.keys(frequencyType).length; i++) {
-    const option = document.createElement('option');
-    option.value = Object.keys(frequencyType)[i];
-    option.text = Object.keys(frequencyType)[i];
-    planfeq.appendChild(option);
-}
+// for (let i = 0; i < Object.keys(frequencyType).length; i++) {
+//     const option = document.createElement('option');
+//     option.value = Object.keys(frequencyType)[i];
+//     option.text = Object.keys(frequencyType)[i];
+//     planfeq.appendChild(option);
+// }
 
 const form = document.getElementById('form');
 
